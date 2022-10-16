@@ -11,40 +11,43 @@ export const App = () => {
   const [totalFeedback, setTotalFeedback] = useState(0);
   const [positiveFeedbackPercentage, setPositiveFeedbackPercentage] = useState(0);
 
-      const onGoodFeedback = () => {
-        setGood(state => state + 1);
+  const onLeaveFeedback = (option) => {
+    if (option === 'good') {
+          setGood(state => state + 1);
+    }
+    if (option === 'neutral') {
+          setNeutral(state => state + 1);
+    }
+    if (option === 'bad') {
+          setBad(state => state + 1);
+        }
+        
       };
     
-      const onNeutralFeedback = () => {
-        setNeutral(state => state + 1);
-      };
-      const onBadFeedback = () => {
-        setBad(state => state + 1);
-      };
- 
+
       useEffect(() => {
        
         if (!(good===0) || !(neutral===0) || !(bad===0)) {
-          setTotalFeedback(state => state + 1)
-         
+          setTotalFeedback(state => state + 1)         
         }
-         }, [good, neutral,bad]);
-         useEffect(() => {
+      }, [good, neutral, bad]);
+  
+         
+      useEffect(() => {
        
           if (totalFeedback>0) {
             setPositiveFeedbackPercentage(Math.round(good/totalFeedback*100))
-          }
-           }, [good,totalFeedback]);
+          }           
+      }, [good, totalFeedback]);
 
       
       
   return (
     <>
       <Section title="Please, leave feedback">
-          <FeedbackOptions good={good} neutral={neutral} bad={bad} onGoodFeedback={onGoodFeedback} onNeutralFeedback={onNeutralFeedback} onBadFeedback={onBadFeedback} /></Section>
+        <FeedbackOptions options={Object.keys({ good, neutral, bad })} onLeaveFeedback={onLeaveFeedback} /></Section>
        
         <Section title="Statistics">
-        {/* <Statistics good={good} neutral={neutral} bad={bad} total={totalFeedback}/> */}
            { totalFeedback>0 ? <Statistics good={good} neutral={neutral} bad={bad} total={totalFeedback} positivePercentage={positiveFeedbackPercentage}/>:
         <Notification message="There is no feedback" />}
           
